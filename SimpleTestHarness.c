@@ -42,7 +42,7 @@ int mockDelays = 3000;
 // Could have easily just been part of the overall main task
 task autoTestTask()
 {
-	driveForward(1000, 100);
+	driveForward(500, 100);
 	spinLeft(90, 100);
 	driveForward(1000, 100);
 	spinLeft(90, 100);
