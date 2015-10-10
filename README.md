@@ -15,7 +15,11 @@ It's now Sept 6th!
 
 Hello World!
 
+<<<<<<< HEAD
 I have changed a super specific set of programs that were broken in Test1. But they are fixed now because I am a professional programmer.
+=======
+I changed something different so that we can see a difference in the two branches. 
+>>>>>>> somethingelse
 
 Fixinging everything that needed fixinging
 
