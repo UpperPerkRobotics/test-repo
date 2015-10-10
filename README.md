@@ -15,9 +15,9 @@ It's now Sept 6th!
 
 Hello World!
 
-This test text is very testy.
 
-This test text is very tasty.
+
+Fixinging everything that needed fixinging
 
 <<<<<<< HEAD
 My text that I am adding is better than your text that you are adding Alex.
