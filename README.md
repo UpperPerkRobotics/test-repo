@@ -1,5 +1,9 @@
 # test-repo
 
+
+test
+
+
 There are many words and characters as in letters that I am adding to this line that I am writing. 
 
 An initial Testing Repository for UPR.
@@ -19,7 +23,7 @@ Hello World!
 I have changed a super specific set of programs that were broken in Test1. But they are fixed now because I am a professional programmer.
 =======
 I changed something different so that we can see a difference in the two branches. 
->>>>>>> somethingelse
+somethingelse
 
 Fixinging everything that needed fixinging
 
