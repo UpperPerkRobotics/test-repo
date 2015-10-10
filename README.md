@@ -1,4 +1,7 @@
 # test-repo
+
+There are many words and characters as in letters that I am adding to this line that I am writing. 
+
 An initial Testing Repository for UPR.
 
 This is an update to the README
@@ -13,9 +16,13 @@ This test text is very testy.
 
 This test text is very tasty.
 
+<<<<<<< HEAD
 My text that I am adding is better than your text that you are adding Alex.
 
 Yeah it is ez
 
 
 lol
+=======
+There are a lot of words in this sentence that I am writing.
+>>>>>>> bb0f88f6c3a3ac3e27a42b8f96227941bff2152e
