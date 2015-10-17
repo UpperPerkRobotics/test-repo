@@ -12,36 +12,36 @@ task shooter_power_control()
 {
 	int last_encoder_clicks = 0;
 	int last_read_time = 0;
-	
+
 	while(true)
 	{
-		int current_click = Sensor[rightShooter];
+		int current_click = SensorValue[rightShooter];
 		int current_read_time = nPgmTime;
-		
+
 		int elapsed_clicks = current_click - last_encoder_clicks;
 		int elapsed_time = current_read_time - last_read_time;
-		
+
 		int current_speed = elapsed_clicks/elapsed_time;
-		
+
 			if (current_speed < shooter_target_speed)
 			{
-				motor[topRight] =  127
-				motor[bottomRight] = 127
+				motor[topRight] =  127;
+				motor[bottomRight] = 127;
 			}
-			else if (current_speed >= shooter_target_speed)		
+			else if (current_speed >= shooter_target_speed)
 			{
-				motor[topRight] = 0
-				motor[bottomRight] = 0
+				motor[topRight] = 0;
+				motor[bottomRight] = 0;
 			}
 			last_encoder_clicks = current_click;
 			last_read_time = current_read_time;
 	}
-
+}
 
 
 task main()
 {
-
+startTask (shooter_power_control);
 
 
 }
