@@ -19,7 +19,8 @@ task shooter_power_control()
 		int current_read_time = nPgmTime;
 
 		int elapsed_clicks = current_click - last_encoder_clicks;
-		int elapsed_time = current_read_time - last_read_time;
+		// int elapsed_time = current_read_time - last_read_time;
+		int elapsed_time = 4;
 
 		int current_speed = elapsed_clicks/elapsed_time;
 
@@ -39,9 +40,64 @@ task shooter_power_control()
 }
 
 
+void set_motor_target_speed(int speed){
+	// For now, set value and print a debug statement
+	shooter_target_speed = speed;
+	writeDebugStreamLine("Shooter Target Speed: %d", shooter_target_speed);
+}
+
+void adjust_target_speed(int adjustment){
+	// For now, adjust value a bit, and print a debug statement
+	shooter_target_speed = shooter_target_speed + adjustment;
+	writeDebugStreamLine("Shooter Target Speed: %d", shooter_target_speed);
+}
+
+// Read Buttons to see if any are pushed
+task controllerPolling(){
+	while(true){
+		// Check each button and do actions
+		if(vexRT[Btn8U] == 1){
+			// Set motor target speed (Far), Channel 8, Button U
+			set_motor_target_speed(127);
+			delay(500);
+		}
+		else if(vexRT[Btn8R] == 1){
+			// Set motor target speed (Medium), Channel 8, Button R
+			set_motor_target_speed(80);
+			delay(500);
+		}
+		else if(vexRT[Btn8D] == 1){
+			// Set motor target speed (Short), Channel 8, Button D
+			set_motor_target_speed(30);
+			delay(500);
+		}
+		else if(vexRT[Btn6U] == 1){
+			// Adjust motor target speed (5 up), Channel 6, Button U
+			adjust_target_speed(5);
+			delay(250);
+		}
+		else if(vexRT[Btn6D] == 1){
+			// Adjust motor target speed (5 down), Channel 6, Button D
+			adjust_target_speed(-5);
+			delay(250);
+		}
+		else if(vexRT[Btn8L] == 1){
+			// Stop all motor speed (0), Channel 8, Button L
+			set_motor_target_speed(0);
+			delay(500);
+		}
+		delay(10);
+	}
+}
+
+
+
+
 task main()
 {
 startTask (shooter_power_control);
-
-
+startTask (controllerPolling);
+while(true){
+	delay(1000);
+	}
 }
