@@ -1,4 +1,5 @@
 int rightValues[5];
+int leftValues[5];
 
 int doFilter(int * valueList) {
 	// get total
@@ -28,6 +29,16 @@ return filterAverage;
 
 }
 
+int filterLeft(int value){
+	// maintain left list
+	for(int i=4; i > 0; --i){
+			leftValues[i] = leftValues[i-1];
+	}
+
+	leftValues[0] = value;
+	//get total
+	return doFilter(leftValues);
+}
 
 int filterRight(int value){
 	// maintain list
