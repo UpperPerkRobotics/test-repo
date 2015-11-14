@@ -1,3 +1,4 @@
+#pragma config(Sensor, dgtl1,  greenLED,       sensorLEDtoVCC)
 #pragma config(Sensor, dgtl4,  LeftEncoder,    sensorQuadEncoder)
 #pragma config(Sensor, dgtl11, RightEncoder,   sensorQuadEncoder)
 #pragma config(Motor,  port8,           Shooter8,      tmotorVex393_MC29, openLoop)
@@ -16,6 +17,14 @@ task Shooting()
 	{
 		motor[Shooter8] = shooter_target_speed;
 		motor[Shooter9] = shooter_target_speed;
+		if (shooter_target_speed > 80)
+		{
+			SensorValue[dgtl1] = 1;
+		}
+		else
+		{
+			SensorValue[dgtl1] = 0;
+		}
 		//get current
 		int current_right_clicks = SensorValue[RightEncoder];
 		int current_left_clicks = SensorValue[LeftEncoder];

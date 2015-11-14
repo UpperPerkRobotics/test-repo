@@ -14,26 +14,26 @@ task Shooting()
 
 	while(true)
 	{
-		motor[Shooter8] = 50;
-		motor[Shooter9] = 50;
+		motor[Shooter8] = 85;
+		motor[Shooter9] = 85;
 		//get current
-	int current_right_clicks = SensorValue[RightEncoder];
-	int current_left_clicks = SensorValue[LeftEncoder];
+		int current_right_clicks = SensorValue[RightEncoder];
+		int current_left_clicks = SensorValue[LeftEncoder];
 		//calculate elapsed
-	int elapsed_right_clicks = current_right_clicks - last_clicks_right;
-	int elapsed_left_clicks = current_left_clicks - last_clicks_left;
+		int elapsed_right_clicks = current_right_clicks - last_clicks_right;
+		int elapsed_left_clicks = current_left_clicks - last_clicks_left;
 		//print
-	writeDebugStreamLine("elapsed_right_clicks: %d", elapsed_right_clicks);
-	writeDebugStreamLine("elapese_left_clicks: %d", elapsed_left_clicks);
+		writeDebugStreamLine("elapsed_right_clicks: %d", elapsed_right_clicks);
+		writeDebugStreamLine("elapese_left_clicks: %d", elapsed_left_clicks);
 		//save current to last
-	last_clicks_left = current_left_clicks;
-	last_clicks_right = current_right_clicks;
-	  delay(100);
+		last_clicks_left = current_left_clicks;
+		last_clicks_right = current_right_clicks;
+		delay(100);
 	}
 
 }
 task main()
 {
-startTask(Shooting);
+	startTask(Shooting);
 
 }
