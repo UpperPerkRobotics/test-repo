@@ -13,6 +13,8 @@ int shooter_target_speed = 0;
 task Shooting()
 {
 
+	int print_value = 0;
+
 	int last_clicks_left = 0;
 	int last_clicks_right = 0;
 
@@ -35,6 +37,8 @@ task Shooting()
 		int elapsed_right_clicks = current_right_clicks - last_clicks_right;
 		int elapsed_left_clicks = current_left_clicks - last_clicks_left;
 		//print
+		print_value = (print_value + 1);
+		if(print_value == 10){
 		writeDebugStreamLine("elapsed_right_clicks: %d", elapsed_right_clicks);
 		writeDebugStreamLine("elapese_left_clicks: %d", elapsed_left_clicks);
 		//save current to last
@@ -42,7 +46,9 @@ task Shooting()
 		last_clicks_left = current_left_clicks;
 		last_clicks_right = current_right_clicks;
 		delay(100);
-	}
+			print_value = 0;
+			}
+		}
 }
 
 void set_motor_target_speed(int speed){
@@ -67,7 +73,7 @@ task Controls()
 			// Check each button and do actions
 		else if(vexRT[Btn8U] == 1){
 			// Set motor target speed (Far), Channel 8, Button U
-			set_motor_target_speed(85);
+			set_motor_target_speed(80);
 			delay(500);
 		}
 		else if(vexRT[Btn8R] == 1){
@@ -82,12 +88,12 @@ task Controls()
 		}
 		else if(vexRT[Btn6U] == 1){
 			// Adjust motor target speed (5 up), Channel 6, Button U
-			adjust_target_speed(3);
+			adjust_target_speed(1);
 			delay(250);
 		}
 		else if(vexRT[Btn6D] == 1){
 			// Adjust motor target speed (5 down), Channel 6, Button D
-			adjust_target_speed(-3);
+			adjust_target_speed(-1);
 			delay(250);
 		}
 		else if(vexRT[Btn8L] == 1){
