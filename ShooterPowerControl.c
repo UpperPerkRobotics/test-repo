@@ -2,7 +2,7 @@
 #include "MockRobotPowerTable.c"
 #include "StopLightControl.c"
 
-
+int shooter_target_speed = 0;
 
 // Global Variables for shooter control
 // These are set by the joystick methods

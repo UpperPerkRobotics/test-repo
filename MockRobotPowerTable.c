@@ -1,7 +1,7 @@
 int getLeftShooterPower(int speed){
-	return 50;
+	return 40;
 }
 
 int getRightShooterPower(int speed){
-	return 50;
+	return 40;
 }
