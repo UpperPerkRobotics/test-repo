@@ -59,13 +59,13 @@ task shooter_power_control(){
 			right_color = NONE;
 			right_power = 0;
 		}
-		// Speed is more than 10% below target
-		else if(current_right_speed < (shooter_target_speed * 0.9)){
+		// Speed is more than 25% below target
+		else if(current_right_speed < (shooter_target_speed * 0.75)){
 			right_color = RED;
 			right_power = 127;
 		}
-		// Speed is more than 10% above target
-		else if(current_right_speed > (shooter_target_speed * 1.1)){
+		// Speed is more than 25% above target
+		else if(current_right_speed > (shooter_target_speed * 1.25)){
 			right_color = RED;
 			right_power = getRightShooterPower(shooter_target_speed);
 		}
@@ -89,13 +89,13 @@ task shooter_power_control(){
 			left_color = NONE;
 			left_power = 0;
 		}
-		// Speed is MORE THAN 10% BELOW target
-		else if(current_left_speed < (shooter_target_speed * 0.9)){
+		// Speed is MORE THAN 25% BELOW target
+		else if(current_left_speed < (shooter_target_speed * 0.75)){
 			left_color = RED;
 			left_power = 127;
 		}
-		// Speed is MORE THAN 10% ABOVE target
-		else if(current_left_speed > (shooter_target_speed * 1.1)){
+		// Speed is MORE THAN 25% ABOVE target
+		else if(current_left_speed > (shooter_target_speed * 1.25)){
 			left_color = RED;
 			left_power = getLeftShooterPower(shooter_target_speed);
 		}
