@@ -1,24 +1,4 @@
 // Read Buttons to see if any are pushed
-int shooter_target_speed = 0;
-
-void set_shooter_targets(int speed){
-	// For now, set value and print a debug statement
-	shooter_target_speed = speed;
-	// shooter_target_power = power;
-	writeDebugStreamLine("Shooter Target Speed: %d", shooter_target_speed);
-}
-
-void adjust_shooter_targets(int adjust_speed){
-	// For now, adjust value a bit, and print a debug statement
-	shooter_target_speed = shooter_target_speed + adjust_speed;
-	// shooter_target_power = shooter_target_power + adjust_power;
-	writeDebugStreamLine("Shooter Target Speed: %d", shooter_target_speed);
-}
-
-void setIntakeSpeed(int speed){
-	motor[leftIntake] = speed;
-	motor[rightIntake] = speed;
-}
 
 task controllerPolling(){
 	while(true){
