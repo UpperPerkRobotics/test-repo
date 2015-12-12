@@ -53,6 +53,7 @@ task controllerPolling(){
 		else if(vexRT[Btn7R] == 1){
 			// Reverse drive train to enable easier intake control
 			driveTrainReversed = !driveTrainReversed;
+			setHeadLights(driveTrainReversed);
 			delay(500);
 		}
 		delay(10);
