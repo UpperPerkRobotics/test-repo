@@ -4,24 +4,24 @@
 #include "StableCheck.c"
 
 int shooter_target_speed = 0;
+bool speedChange = false;
+
 
 // Global Variables for shooter control
 // These are set by the joystick methods
 
 task shooter_power_control(){
 
-int rightPowerOffset = 0;
-int leftPowerOffset = 0;
+	int rightPowerOffset = 0;
+	int leftPowerOffset = 0;
 
-bool recoveringRight = false;
-bool recoveringLeft = false;
+	bool recoveringRight = false;
+	bool recoveringLeft = false;
 
 
 	int last_right_clicks = 0;
 	int last_left_clicks = 0;
 	int last_read_time = -10;
-
-	int print_value = 0;
 
 	int left_power = 0;
 	int right_power = 0;
@@ -54,127 +54,139 @@ bool recoveringLeft = false;
 		if(shooter_target_speed == 0){
 			right_color = NONE;
 			right_power = 0;
+
+			left_color = NONE;
+			left_power = 0;
 		}
 
-		// Right Side Speed Control
-		// Right Side is in recovery mode
-		if (recoveringRight){
-			// In recovery mode, we use max power until we reach 95% of target speed
-			if(current_right_speed > (shooter_target_speed * 0.95)){
-				recoveringRight = false;
-				right_color = YELLOW;
-				right_power = getRightShooterPower(shooter_target_speed) + rightPowerOffset;
-			}
-			// We're not at 95% yet, so keep recovering
-			else{
-				right_color = RED;
-				right_power = 127;
-			}
-		}
-		// Else in Normal mode
+		// else shooter target speed > 0
 		else{
-		// In normal mode, we use the lookup table
-		// We make small adjustments (but not yet)
-		// And we may move to recovery mode
-
-		// Speed is LESS THAN 85% of target speed
-		if(current_right_speed < (shooter_target_speed * 0.85)){
-			recoveringRight = true;
-			right_color = RED;
-			right_power = 127;
-		}
-
-		// Otherwise use canned numbers
-		else {
-			right_power = getRightShooterPower(shooter_target_speed) + rightPowerOffset;
-			right_color = YELLOW;
-
-			if (isRightStable(current_right_speed)){
-				purgeRightValues();
-				// Print out "Right side stable @ what power, and what speed"
-				writeDebugStreamLine("Right side stable at %d speed", current_right_speed);
-				writeDebugStreamLine("Right side stable at %d power", right_power);
-
-				// Now just set the colors
-				// Speed is between 1% above or below target
-				if(current_right_speed < (shooter_target_speed * 0.99)){
+			// Right Side Speed Control
+			// Right Side is in recovery mode
+			if (recoveringRight){
+				// In recovery mode, we use max power until we reach 95% of target speed
+				if(current_right_speed > (shooter_target_speed * 0.95)){
+					recoveringRight = false;
 					right_color = YELLOW;
-					rightPowerOffset = rightPowerOffset + 1;
+					right_power = getRightShooterPower(shooter_target_speed) + rightPowerOffset;
+					writeDebugStreamLine("Right Side Now NORMAL Mode - Adjusted Power: %d (%d Offset)", right_power, rightPowerOffset);
 				}
-				else if(current_right_speed > (shooter_target_speed * 1.02)){
-					right_color = YELLOW;
-					rightPowerOffset = rightPowerOffset - 1;
-				}
-				// Speed is in the 3% sweet spot
-				else {
-					right_color = GREEN;
+				// We're not at 95% yet, so keep recovering
+				else{
+					right_color = RED;
+					right_power = 127;
 				}
 			}
-		}
-	}
-		// End of Right side Speed Control
-
-		// Left Side Speed Control
-		// Left Side is in recovery mode
-		if (recoveringLeft){
-			// In recovery mode, we use max power until we reach 95% of target speed
-			if(current_left_speed > (shooter_target_speed * 0.95)){
-				recoveringLeft = false;
-				left_color = YELLOW;
-				left_power = getLeftShooterPower(shooter_target_speed) + leftPowerOffset;
-			}
-			// We're not at 95% yet, so keep recovering
+			// Else in Normal mode
 			else{
-				left_color = RED;
-				left_power = 127;
-			}
-		}
-		// Else in Normal mode
-		else{
-		// In normal mode, we use the lookup table
-		// We make small adjustments (but not yet)
-		// And we may move to recovery mode
+			// In normal mode, we use the lookup table
+			// We make small adjustments (but not yet)
+			// And we may move to recovery mode
 
-		// Speed is LESS THAN 85% of target speed
-		if(current_left_speed < (shooter_target_speed * 0.85)){
-			recoveringLeft = true;
-			left_color = RED;
-			left_power = 127;
-		}
-
-		// Otherwise use canned numbers
-		else {
-			left_power = getLeftShooterPower(shooter_target_speed) + leftPowerOffset;
-			left_color = YELLOW;
-
-				if (isLeftStable(current_left_speed)){
-				purgeLeftValues();
-				// Print out "Left side stable @ what power, and what speed"
-				writeDebugStreamLine("Left side stable at %d speed", current_left_speed);
-				writeDebugStreamLine("Left side stable at %d power", left_power);
-			}
-
-				// Now just set the colors
-				// Speed is between 1% above or below target
-				if(current_left_speed < (shooter_target_speed * 0.99)){
-					left_color = YELLOW;
-					leftPowerOffset = leftPowerOffset + 1;
+			// Speed is LESS THAN 85% of target speed
+				if(current_right_speed < (shooter_target_speed * 0.85)){
+					writeDebugStreamLine("Right Side Now **** RECOVERY MODE ***");
+					recoveringRight = true;
+					right_color = RED;
+					right_power = 127;
 				}
-				else if(current_left_speed > (shooter_target_speed * 1.02)){
-					left_color = YELLOW;
-					leftPowerOffset = leftPowerOffset - 1;
-				}
-				// Speed is in the 3% sweet spot
+				// Otherwise use canned numbers
 				else {
-				left_color = GREEN;
+					right_power = getRightShooterPower(shooter_target_speed) + rightPowerOffset;
+					right_color = YELLOW;
+
+					if (isRightStable(current_right_speed)){
+						purgeRightValues();
+						// Print out "Right side stable @ what power, and what speed"
+						writeDebugStreamLine("Right side stable at %d speed", current_right_speed);
+
+						// Now just set the colors
+						// Speed is between 1% above or below target
+						if(current_right_speed < (shooter_target_speed * 0.98)){
+							right_color = YELLOW;
+							// PowerOffset should never go over 10...
+							// If so, something's wrong
+							if (rightPowerOffset < 10){
+								rightPowerOffset = rightPowerOffset + 1;
+							}
+						}
+						else if(current_right_speed > (shooter_target_speed * 1.02)){
+							right_color = YELLOW;
+							if (rightPowerOffset > -10){
+								rightPowerOffset = rightPowerOffset - 1;
+							}
+						}
+						// Speed is in the 4% sweet spot
+						else {
+							right_color = GREEN;
+						}
+					} // end is stable
+				} // end else (use canned numbers)
+			} // end else (normal mode)
+			// End of Right side Speed Control
+
+			// Left Side Speed Control
+			// Left Side is in recovery mode
+			if (recoveringLeft){
+				// In recovery mode, we use max power until we reach 95% of target speed
+				if(current_left_speed > (shooter_target_speed * 0.95)){
+					recoveringLeft = false;
+					left_color = YELLOW;
+					left_power = getLeftShooterPower(shooter_target_speed) + leftPowerOffset;
+					writeDebugStreamLine("Left Side Now NORMAL Mode - Adjusted Power: %d (%d Offset)", left_power, leftPowerOffset);
+				}
+				// We're not at 95% yet, so keep recovering
+				else{
+					left_color = RED;
+					left_power = 127;
+				}
 			}
-		}
-	}
-		// End of Left Side Speed Control
+			// Else in Normal mode
+			else{
+			// In normal mode, we use the lookup table
+			// We make small adjustments (but not yet)
+			// And we may move to recovery mode
 
+			// Speed is LESS THAN 85% of target speed
+				if(current_left_speed < (shooter_target_speed * 0.85)){
+					writeDebugStreamLine("Left Side Now *** RECOVERY MODE ****");
+					recoveringLeft = true;
+					left_color = RED;
+					left_power = 127;
+				}
 
+				// Otherwise use canned numbers
+				else {
+					left_power = getLeftShooterPower(shooter_target_speed) + leftPowerOffset;
+					left_color = YELLOW;
 
-
+					if (isLeftStable(current_left_speed)){
+						purgeLeftValues();
+						// Print out "Left side stable @ what power, and what speed"
+						writeDebugStreamLine("Left side stable at %d speed", current_left_speed);
+						// Now just set the colors
+						// Speed is between 1% above or below target
+						if(current_left_speed < (shooter_target_speed * 0.98)){
+							left_color = YELLOW;
+							if(leftPowerOffset < 10){
+								leftPowerOffset = leftPowerOffset + 1;
+							}
+						}
+						else if(current_left_speed > (shooter_target_speed * 1.02)){
+							left_color = YELLOW;
+							if(leftPowerOffset > -10){
+								leftPowerOffset = leftPowerOffset - 1;
+							}
+						}
+						// Speed is in the 4% sweet spot
+						else {
+							left_color = GREEN;
+						}
+					} // end is stable
+				} // end "else use canned numbers"
+			} // end "else in normal mode"
+			// End of Left Side Speed Control
+		} // End "Else shooter Target speed > 0
 		// Set Stoplight
 		if((right_color == NONE) && (left_color == NONE)){
 			setStopLight(NONE);
@@ -189,6 +201,13 @@ bool recoveringLeft = false;
 			setStopLight(YELLOW);
 		}
 
+		// The speed was changed, print the new target powers
+		if (speedChange){
+			speedChange = false;
+			writeDebugStreamLine("Left Side New - Adjusted Power: %d (%d Offset)", left_power, leftPowerOffset);
+			writeDebugStreamLine("Right Side New - Adjusted Power: %d (%d Offset)", right_power, rightPowerOffset);
+		}
+
 		// Control motor power
 		motor[leftTopShooter] = left_power;
 		motor[rightTopShooter] = right_power;
@@ -200,18 +219,6 @@ bool recoveringLeft = false;
 			last_read_time = current_read_time;
 
 			delay(20);
-
-			print_value = (print_value + 1);
-			if(print_value == 50){
-				//writeDebugStreamLine("current_right_clicks: %d", current_right_clicks);
-				//writeDebugStreamLine("elapsed_right_clicks: %d", elapsed_right_clicks);
-				//writeDebugStreamLine("elapsed_time: %d", elapsed_time);
-				//writeDebugStreamLine("current_read_time: %d", current_read_time);
-				writeDebugStreamLine("************************************");
-				writeDebugStreamLine("shooter_target_speed: %d", shooter_target_speed);
-				print_value = 0;
-			}
-
 	}
 }
 
@@ -219,14 +226,14 @@ bool recoveringLeft = false;
 void set_shooter_targets(int speed){
 	// For now, set value and print a debug statement
 	shooter_target_speed = speed;
-	// shooter_target_power = power;
+	speedChange = true;
 	writeDebugStreamLine("Shooter Target Speed: %d", shooter_target_speed);
 }
 
 void adjust_shooter_targets(int adjust_speed){
 	// For now, adjust value a bit, and print a debug statement
 	shooter_target_speed = shooter_target_speed + adjust_speed;
-	// shooter_target_power = shooter_target_power + adjust_power;
+	speedChange = true;
 	writeDebugStreamLine("Shooter Target Speed: %d", shooter_target_speed);
 }
 
