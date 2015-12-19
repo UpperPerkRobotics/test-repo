@@ -2,6 +2,17 @@ int rightStableList[5];
 int leftStableList[5];
 
 
+void purgeLeftValues(){
+  for(int i=0; i < 5; i++){
+ 		leftStableList[i] = 0;
+ }
+}
+
+void purgeRightValues(){
+ for(int i=0; i < 5; i++){
+ 		rightStableList[i] = 0;
+ }
+}
 
 bool stableCheck( int * list){
 
