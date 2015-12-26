@@ -38,6 +38,11 @@ task shooter_power_control(){
 	{
 
 		loop_counter = loop_counter + 1;
+		//Don't let the counts get too high!!!
+		if (loop_counter > 30){
+			green_counter = 0;
+			loop_counter = 0;
+		}
 
 		// Variables for power control
 		int current_right_clicks = SensorValue[rightShooter];
@@ -90,6 +95,11 @@ task shooter_power_control(){
 					right_adjust_lockout = ADJUST_LOCKOUT_CYCLES * 2;
 					right_color = YELLOW;
 					right_power = getRightShooterPower(shooter_target_speed) + rightPowerOffset;
+
+					// ending recovery, clear counters
+					green_counter = 0;
+					loop_counter = 0;
+
 					writeDebugStreamLine("Right Side Now NORMAL Mode - Adjusted Power: %d (%d Offset)", right_power, rightPowerOffset);
 				}
 				// We're not at 95% yet, so keep recovering
@@ -196,6 +206,11 @@ task shooter_power_control(){
 					left_adjust_lockout = ADJUST_LOCKOUT_CYCLES * 2;
 					left_color = YELLOW;
 					left_power = getLeftShooterPower(shooter_target_speed) + leftPowerOffset;
+
+					// ending recovery, clear counters
+					green_counter = 0;
+					loop_counter = 0;
+
 					writeDebugStreamLine("Left Side Now NORMAL Mode - Adjusted Power: %d (%d Offset)", left_power, leftPowerOffset);
 				}
 				// We're not at 95% yet, so keep recovering
