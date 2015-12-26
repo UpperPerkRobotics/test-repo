@@ -38,7 +38,7 @@ bool stableCheck( int * list){
 
 bool isLeftStable (int currentSpeed){
 	// maintain left list
-	for(int i=9 i > 0; --i){
+	for(int i=9 ; i > 0; --i){
 			leftStableList[i] = leftStableList[i-1];
 	}
 
@@ -48,7 +48,7 @@ bool isLeftStable (int currentSpeed){
 }
 bool isRightStable (int currentSpeed){
 	// maintain list
-	for(int i = 9 i > 0; --i){
+	for(int i = 9; i > 0; --i){
 			rightStableList[i] = rightStableList[i-1];
 	}
 

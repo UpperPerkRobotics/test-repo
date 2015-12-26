@@ -18,7 +18,7 @@ task controllerPolling(){
 		}
 		else if((vexRT[Btn8D] == 1) || (vexRT[Btn8DXmtr2] == 1)){
 			// Set motor target speed (Short), Channel 8, Button D
-			set_shooter_targets(630);
+			set_shooter_targets(570);
 			delay(500);
 		}
 		else if((vexRT[Btn6U] == 1) || (vexRT[Btn6UXmtr2] == 1)){
