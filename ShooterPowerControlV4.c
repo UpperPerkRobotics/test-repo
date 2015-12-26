@@ -31,9 +31,13 @@ task shooter_power_control(){
 	int left_adjust_lockout = 0;
 	int right_adjust_lockout = 0;
 
+	int loop_counter = 0;
+	int green_counter = 0;
+
 	while(true)
 	{
 
+		loop_counter = loop_counter + 1;
 
 		// Variables for power control
 		int current_right_clicks = SensorValue[rightShooter];
@@ -71,6 +75,8 @@ task shooter_power_control(){
 
 			left_color = NONE;
 			left_power = 0;
+
+			ShooterMode = STOPPED;
 		}
 
 		// else shooter target speed > 0
@@ -285,12 +291,27 @@ task shooter_power_control(){
 		}
 		else if((right_color == GREEN) && (left_color == GREEN)){
 			setStopLight(GREEN);
+			green_counter = green_counter + 1;
+			if (isShooterReady(green_counter,loop_counter)){
+				ShooterMode = READY_TO_SHOOT;
+			}
+			else{
+				ShooterMode = NORMAL;
+			}
 		}
 		else if((right_color == RED) || (left_color == RED)){
+			// RED LIGHT = RECOVERY MODE!!!
 			setStopLight(RED);
+			ShooterMode = RECOVERY;
 		}
 		else {
 			setStopLight(YELLOW);
+				if (isShooterReady(green_counter,loop_counter)){
+				ShooterMode = READY_TO_SHOOT;
+			}
+			else{
+				ShooterMode = NORMAL;
+			}
 		}
 
 		// The speed was changed, print the new target powers
@@ -327,9 +348,4 @@ void adjust_shooter_targets(int adjust_speed){
 	shooter_target_speed = shooter_target_speed + adjust_speed;
 	speedChange = true;
 	writeDebugStreamLine("Shooter Target Speed: %d", shooter_target_speed);
-}
-
-void setIntakeSpeed(int speed){
-	motor[leftIntake] = speed;
-	motor[rightIntake] = speed;
 }

@@ -13,3 +13,20 @@ else if ((greencounts >= (.75 * loopcounts)) &&(loopcounts > 10))
 else
 	return false;
 }
+
+void setIntakeSpeed(int speed){
+	motor[leftIntake] = speed;
+	motor[rightIntake] = speed;
+}
+
+task AutoIntake(){
+	while (true){
+		if (ShooterMode == READY_TO_SHOOT){
+				setIntakeSpeed(100);
+		}
+		else{
+				setIntakeSpeed(0);
+		}
+	delay (50);
+	}
+}
