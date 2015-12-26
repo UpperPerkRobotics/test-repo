@@ -8,7 +8,7 @@ task controllerPolling(){
 		// Check each button and do actions
 		if((vexRT[Btn8U] == 1) || (vexRT[Btn8UXmtr2] == 1)){
 			// Set motor target speed (Far), Channel 8, Button U
-			set_shooter_targets(1200);
+			set_shooter_targets(850);
 			delay(500);
 		}
 		else if((vexRT[Btn8R] == 1) || (vexRT[Btn8RXmtr2] == 1)){
