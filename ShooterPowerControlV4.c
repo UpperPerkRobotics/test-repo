@@ -40,7 +40,8 @@ task shooter_power_control(){
 	{
 
 	if (backOut == true){
-		shooter_target_speed = -50;
+		motor[leftTopShooter] = -20;
+		motor[rightTopShooter] = -20;
 		}
 
 		else {
