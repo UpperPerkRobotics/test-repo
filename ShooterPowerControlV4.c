@@ -98,10 +98,10 @@ task shooter_power_control(){
 					// Right Side Speed Control
 					// Right Side is in recovery mode
 					if (recoveringRight){
-						// In recovery mode, we use max power until we reach 98% of target speed
-						if(current_right_speed > (shooter_target_speed * 0.98)){
+						// In recovery mode, we use max power until we reach 93% of target speed
+						if(current_right_speed > (shooter_target_speed * 0.93)){
 							recoveringRight = false;
-							right_adjust_lockout = ADJUST_LOCKOUT_CYCLES * 2;
+							right_adjust_lockout = ADJUST_LOCKOUT_CYCLES ;
 							right_color = YELLOW;
 							right_power = getRightShooterPower(shooter_target_speed) + rightPowerOffset;
 
@@ -209,10 +209,10 @@ task shooter_power_control(){
 					// Left Side Speed Control
 					// Left Side is in recovery mode
 					if (recoveringLeft){
-						// In recovery mode, we use max power until we reach 98% of target speed
-						if(current_left_speed > (shooter_target_speed * 0.98)){
+						// In recovery mode, we use max power until we reach 93% of target speed
+						if(current_left_speed > (shooter_target_speed * 0.93)){
 							recoveringLeft = false;
-							left_adjust_lockout = ADJUST_LOCKOUT_CYCLES * 2;
+							left_adjust_lockout = ADJUST_LOCKOUT_CYCLES ;
 							left_color = YELLOW;
 							left_power = getLeftShooterPower(shooter_target_speed) + leftPowerOffset;
 
