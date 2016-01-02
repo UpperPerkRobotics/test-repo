@@ -117,8 +117,77 @@ int getRightShooterPower(int speed){
 	else if (speed > 640){
 		power = 46;
 	}
-		else if (speed > 630){
+	else if (speed > 630){
 		power = 45;
+	}
+	else if (speed > 620){
+		power = 44;
+	}
+	else if (speed > 610){
+		power = 44;
+	}
+	else if (speed > 600){
+		power = 43;
+	}
+	else if (speed > 590){
+		power = 42;
+	}
+	else if (speed > 580){
+		power = 41;
+	}
+	else if (speed > 570){
+		power = 40;
+	}
+	else if (speed > 560){
+		power = 39;
+	}
+	else if (speed > 550){
+		power = 38;
+	}
+	else if (speed > 540){
+		power = 37;
+	}
+	else if (speed > 530){
+		power = 36;
+	}
+	else if (speed > 520){
+		power = 35;
+	}
+	else if (speed > 510){
+		power = 34;
+	}
+	else if (speed > 500){
+		power = 33;
+	}
+	else if (speed > 490){
+		power = 32;
+	}
+	else if (speed > 480){
+		power = 31;
+	}
+	else if (speed > 470){
+		power = 30;
+	}
+	else if (speed > 460){
+		power = 29;
+	}
+	else if (speed > 450){
+		power = 28;
+	}
+	else if (speed > 440){
+		power = 27;
+	}
+	else if (speed > 430){
+		power = 26;
+	}
+	else if (speed > 420){
+		power = 25;
+	}
+	else if (speed > 410){
+		power = 24;
+	}
+	else if (speed > 400){
+		power = 23;
 	}
 	else if (speed > 100){
 		power = 20;
@@ -253,6 +322,57 @@ int getLeftShooterPower(int speed){
 	}
 		else if (speed > 570){
 		power = 45;
+	}
+	else if (speed > 560){
+		power = 44;
+	}
+	else if (speed > 550){
+		power = 43;
+	}
+	else if (speed > 540){
+		power = 42;
+	}
+	else if (speed > 530){
+		power = 41;
+	}
+	else if (speed > 520){
+		power = 40;
+	}
+	else if (speed > 510){
+		power = 39;
+	}
+	else if (speed > 500){
+		power = 39;
+	}
+	else if (speed > 490){
+		power = 38;
+	}
+	else if (speed > 480){
+		power = 37;
+	}
+	else if (speed > 470){
+		power = 36;
+	}
+	else if (speed > 460){
+		power = 35;
+	}
+	else if (speed > 450){
+		power = 34;
+	}
+	else if (speed > 440){
+		power = 33;
+	}
+	else if (speed > 430){
+		power = 32;
+	}
+	else if (speed > 420){
+		power = 31;
+	}
+	else if (speed > 410){
+		power = 30;
+	}
+	else if (speed > 400){
+		power = 29;
 	}
 	else if (speed > 100){
 		power = 20;
