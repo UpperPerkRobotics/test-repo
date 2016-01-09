@@ -34,14 +34,21 @@ task controllerPolling(){
 		else if((vexRT[Btn8L] == 1) || (vexRT[Btn8LXmtr2] == 1)){
 			// Stop all motor speed (0), Channel 8, Button L
 			if (shooter_target_speed == 0){
+				if (backOut == false){
+					toggleShooterWheels = true;
+				}
 				backOut = true;
 			}
+
 			set_shooter_targets(0);
 			delay(500);
 		}
 		else if (backOut){
+			toggleShooterWheels = true;
 			backOut = false;
 		}
+
+
 		else if((vexRT[Btn7U] == 1) || (vexRT[Btn7UXmtr2] == 1)){
 			// Forward Intake, Channel 7, Button U
 			manualIntake = false;
