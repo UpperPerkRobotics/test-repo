@@ -8,7 +8,7 @@ int ShooterMode = STOPPED;
 bool isShooterReady (int greencounts,int loopcounts){
 if (ShooterMode == READY_TO_SHOOT)
 	return true;
-else if ((greencounts >= (.75 * loopcounts)) &&(loopcounts > 10))
+else if ((greencounts >= (.75 * loopcounts)) && (loopcounts > 10))
 	return true;
 else
 	return false;

@@ -21,13 +21,20 @@
 #include "DriverJoystickControls.c"
 task main()
 {
+	setHeadLights(driveTrainReversed);
+
+// Fake Autonomous
+	startTask(shooter_power_control);
+	set_shooter_targets(910);
+	startTask(AutoIntake);
+	delay(15000);
+	stopAllTasks();
+
+	// User Control
 	startTask(shooter_power_control);
 	startTask(controllerPolling);
 	startTask(driving);
-	setHeadLights(driveTrainReversed);
 
-	// Comment out to use manual intake
-	startTask(AutoIntake);
 	while(true)
 	{
 		delay(100000);
