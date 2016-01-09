@@ -203,8 +203,8 @@ task shooter_power_control(){
 						// Now set the power level, and color
 						right_power = getRightShooterPower(shooter_target_speed) + rightPowerOffset;
 						right_color = YELLOW;
-						if ((current_right_speed > (shooter_target_speed - 40)) &&
-								(current_right_speed < (shooter_target_speed + 40))){
+						if ((current_right_speed > (shooter_target_speed - 50)) &&
+								(current_right_speed < (shooter_target_speed + 50))){
 									right_color = GREEN;
 						}
 
@@ -307,8 +307,8 @@ task shooter_power_control(){
 						// Now set the power level, and color
 						left_power = getLeftShooterPower(shooter_target_speed) + leftPowerOffset;
 						left_color = YELLOW;
-						if ((current_left_speed > (shooter_target_speed - 40)) &&
-								(current_left_speed < (shooter_target_speed + 40))){
+						if ((current_left_speed > (shooter_target_speed - 50)) &&
+								(current_left_speed < (shooter_target_speed + 50))){
 									left_color = GREEN;
 						}
 					} // end "else use canned numbers"
