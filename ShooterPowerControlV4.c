@@ -9,7 +9,7 @@ int shooter_target_speed = 0;
 bool speedChange = false;
 bool backOut = false;
 // backOut is for returning a ball from the shooter back into the intake.
-
+bool toggleShooterWheels = false;
 
 // Global Variables for shooter control
 // These are set by the joystick methods
@@ -38,6 +38,12 @@ task shooter_power_control(){
 
 	while(true)
 	{
+		if (toggleShooterWheels == true){
+			motor[leftTopShooter] = 0;
+			motor[rightTopShooter] = 0;
+			delay(2000);
+			toggleShooterWheels = false;
+		}
 		// Backout mode has highest priority
 		if (backOut == true){
 			motor[leftTopShooter] = -100;

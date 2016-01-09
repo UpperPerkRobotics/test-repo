@@ -27,7 +27,7 @@ task main()
 	setHeadLights(driveTrainReversed);
 
 	// Comment out to use manual intake
-	startTask(AutoIntake);
+	//startTask(AutoIntake);
 	while(true)
 	{
 		delay(100000);
