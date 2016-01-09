@@ -149,7 +149,7 @@ task shooter_power_control(){
 									writeDebugStreamLine("Right Side Offset Adjust +3 - Adjusted Power: %d (%d Offset)", right_power, rightPowerOffset);
 								}
 							}
-							else if(current_right_speed < (shooter_target_speed * 0.95)){
+							else if(current_right_speed < (shooter_target_speed - 40)){
 								// PowerOffset should never go over 30...
 								// If so, something's wrong
 								if ((rightPowerOffset < 30) && (right_adjust_lockout == 0)){
@@ -158,7 +158,7 @@ task shooter_power_control(){
 									writeDebugStreamLine("Right Side Offset Adjust +2 - Adjusted Power: %d (%d Offset)", right_power, rightPowerOffset);
 								}
 							}
-							else if(current_right_speed < (shooter_target_speed * 0.98)){
+							else if(current_right_speed < (shooter_target_speed - 20)){
 								// PowerOffset should never go over 30...
 								// If so, something's wrong
 								if ((rightPowerOffset < 30) && (right_adjust_lockout == 0)){
@@ -174,14 +174,14 @@ task shooter_power_control(){
 									writeDebugStreamLine("Right Side Offset Adjust - 3 - Adjusted Power: %d (%d Offset)", right_power, rightPowerOffset);
 								}
 							}
-							else if(current_right_speed > (shooter_target_speed * 1.05)){
+							else if(current_right_speed > (shooter_target_speed + 40)){
 								if ((rightPowerOffset > -30) && (right_adjust_lockout == 0)){
 									rightPowerOffset = rightPowerOffset - 2;
 									right_adjust_lockout = ADJUST_LOCKOUT_CYCLES;
 									writeDebugStreamLine("Right Side Offset Adjust - 2 - Adjusted Power: %d (%d Offset)", right_power, rightPowerOffset);
 								}
 							}
-							else if(current_right_speed > (shooter_target_speed * 1.02)){
+							else if(current_right_speed > (shooter_target_speed - 20)){
 								if ((rightPowerOffset > -30) && (right_adjust_lockout == 0)){
 									rightPowerOffset = rightPowerOffset - 1;
 									right_adjust_lockout = ADJUST_LOCKOUT_CYCLES;
@@ -197,8 +197,8 @@ task shooter_power_control(){
 						// Now set the power level, and color
 						right_power = getRightShooterPower(shooter_target_speed) + rightPowerOffset;
 						right_color = YELLOW;
-						if ((current_right_speed > (shooter_target_speed * .95)) &&
-								(current_right_speed < (shooter_target_speed * 1.05))){
+						if ((current_right_speed > (shooter_target_speed - 40)) &&
+								(current_right_speed < (shooter_target_speed + 40))){
 									right_color = GREEN;
 						}
 
@@ -258,14 +258,14 @@ task shooter_power_control(){
 									writeDebugStreamLine("Left Side Offset Adjust +3 - Adjusted Power: %d (%d Offset)", left_power, leftPowerOffset);
 								}
 							}
-							else if(current_left_speed < (shooter_target_speed * 0.95)){
+							else if(current_left_speed < (shooter_target_speed - 40)){
 								if((leftPowerOffset < 30) && (left_adjust_lockout == 0)){
 									leftPowerOffset = leftPowerOffset + 2;
 									left_adjust_lockout = ADJUST_LOCKOUT_CYCLES;
 									writeDebugStreamLine("Left Side Offset Adjust +2 - Adjusted Power: %d (%d Offset)", left_power, leftPowerOffset);
 								}
 							}
-							else if(current_left_speed < (shooter_target_speed * 0.98)){
+							else if(current_left_speed < (shooter_target_speed - 20)){
 								if((leftPowerOffset < 30) && (left_adjust_lockout == 0)){
 									leftPowerOffset = leftPowerOffset + 1;
 									left_adjust_lockout = ADJUST_LOCKOUT_CYCLES;
@@ -279,14 +279,14 @@ task shooter_power_control(){
 									writeDebugStreamLine("Left Side Offset Adjust -3 - Adjusted Power: %d (%d Offset)", left_power, leftPowerOffset);
 								}
 							}
-							else if(current_left_speed > (shooter_target_speed * 1.05)){
+							else if(current_left_speed > (shooter_target_speed + 40)){
 								if((leftPowerOffset > -30) && (right_adjust_lockout == 0)){
 									leftPowerOffset = leftPowerOffset - 2;
 									left_adjust_lockout = ADJUST_LOCKOUT_CYCLES;
 									writeDebugStreamLine("Left Side Offset Adjust -2 - Adjusted Power: %d (%d Offset)", left_power, leftPowerOffset);
 								}
 							}
-							else if(current_left_speed > (shooter_target_speed * 1.02)){
+							else if(current_left_speed > (shooter_target_speed + 20)){
 								if((leftPowerOffset > -30) && (right_adjust_lockout == 0)){
 									leftPowerOffset = leftPowerOffset - 1;
 									left_adjust_lockout = ADJUST_LOCKOUT_CYCLES;
@@ -301,8 +301,8 @@ task shooter_power_control(){
 						// Now set the power level, and color
 						left_power = getLeftShooterPower(shooter_target_speed) + leftPowerOffset;
 						left_color = YELLOW;
-						if ((current_left_speed > (shooter_target_speed * .95)) &&
-								(current_left_speed < (shooter_target_speed * 1.05))){
+						if ((current_left_speed > (shooter_target_speed - 40)) &&
+								(current_left_speed < (shooter_target_speed + 40))){
 									left_color = GREEN;
 						}
 					} // end "else use canned numbers"
