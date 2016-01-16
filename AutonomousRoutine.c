@@ -24,7 +24,7 @@
 
 #include "HeadLightControl.c"
 #include "AutoShooting.c"
-#include "ShooterPowerControlV4.c"
+#include "ShooterPowerControlV5.c"
 #include "DriverJoystickControls.c"
 #include "Vex_Competition_Includes.c"
 
