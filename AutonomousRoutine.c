@@ -3,6 +3,7 @@
 #pragma config(Sensor, dgtl3,  RedLight,       sensorLEDtoVCC)
 #pragma config(Sensor, dgtl4,  leftShooter,    sensorQuadEncoder)
 #pragma config(Sensor, dgtl6,  rightShooter,   sensorQuadEncoder)
+#pragma config(Sensor, dgtl8,  drive,          sensorQuadEncoder)
 #pragma config(Sensor, dgtl11, FrontLED,       sensorLEDtoVCC)
 #pragma config(Sensor, dgtl12, BackLED,        sensorLEDtoVCC)
 #pragma config(Motor,  port2,           leftDrive,     tmotorVex393_MC29, openLoop)
