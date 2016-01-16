@@ -21,7 +21,7 @@ void spinLeft(){
 // reset Enconder
 SensorValue[drive] = 0;
 // while Loop
-while( SensorValue[drive] < 300){
+while( SensorValue[drive] < 50){
 	// set motors
 	motor[leftDrive] = 50;
 	motor[rightDrive] = -50;
