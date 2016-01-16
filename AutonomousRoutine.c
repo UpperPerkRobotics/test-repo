@@ -26,7 +26,7 @@
 #include "HeadLightControl.c"
 #include "AutoShooting.c"
 #include "AutoShootingSimple.c"
-#include "ShooterPowerControlV4.c"
+#include "ShooterPowerControlV5.c"
 #include "DriverJoystickControls.c"
 #include "Vex_Competition_Includes.c"
 
@@ -42,7 +42,7 @@ task autonomous()
 	simpleAutoIntake(5);
 	if(SensorValue[Jumper] == 1){
 		set_shooter_targets(0);
-		spinLeft();
+		//spinLeft();
 	}
 	else {
 		simpleAutoIntake(5);
