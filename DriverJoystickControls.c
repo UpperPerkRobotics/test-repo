@@ -34,16 +34,14 @@ task controllerPolling(){
 		else if((vexRT[Btn8L] == 1) || (vexRT[Btn8LXmtr2] == 1)){
 			// Stop all motor speed (0), Channel 8, Button L
 			if (shooter_target_speed == 0){
-				if (backOut == false){
-					toggleShooterWheels = true;
-				}
+				delay(500)
 				backOut = true;
 			}
-
 			set_shooter_targets(0);
 			delay(500);
 		}
 		else if (backOut){
+			delay(1000);
 			toggleShooterWheels = true;
 			backOut = false;
 		}
