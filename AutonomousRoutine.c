@@ -3,6 +3,7 @@
 #pragma config(Sensor, dgtl3,  RedLight,       sensorLEDtoVCC)
 #pragma config(Sensor, dgtl4,  leftShooter,    sensorQuadEncoder)
 #pragma config(Sensor, dgtl6,  rightShooter,   sensorQuadEncoder)
+#pragma config(Sensor, dgtl9,  Jumper,         sensorTouch)
 #pragma config(Sensor, dgtl11, FrontLED,       sensorLEDtoVCC)
 #pragma config(Sensor, dgtl12, BackLED,        sensorLEDtoVCC)
 #pragma config(Motor,  port2,           leftDrive,     tmotorVex393_MC29, openLoop)
@@ -24,6 +25,7 @@
 
 #include "HeadLightControl.c"
 #include "AutoShooting.c"
+#include "AutoShootingSimple.c"
 #include "ShooterPowerControlV4.c"
 #include "DriverJoystickControls.c"
 #include "Vex_Competition_Includes.c"
@@ -37,7 +39,14 @@ task autonomous()
 {
 	startTask(shooter_power_control);
 	set_shooter_targets(910);
-	startTask(AutoIntake);
+	simpleAutoIntake(5);
+	if(SensorValue[Jumper] == 1){
+		set_shooter_targets(0);
+		spinLeft();
+	}
+	else {
+		simpleAutoIntake(5);
+	}
 }
 
 task usercontrol()
