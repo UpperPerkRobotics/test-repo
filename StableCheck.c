@@ -1,4 +1,4 @@
-#define BUFFER_SIZE 15
+#define BUFFER_SIZE 18
 
 int rightStableList[BUFFER_SIZE];
 int leftStableList[BUFFER_SIZE];
@@ -16,29 +16,48 @@ void purgeRightValues(){
  }
 }
 
-bool stableCheck( int * list){
+int stableCheck( int * list){
 
 	int total = 0;
 	int average = 0;
 	int maxrange;
 	int minrange;
+	int forecast = 0;
+	int firstHalfTotal = 0;
+	int firstHalfAve = 0;
+	int secondHalfTotal = 0;
+	int secondHalfAve = 0;
+
 	for(int i=0; i < BUFFER_SIZE; i++){
 		total = total +	list[i];
-	}
-		average = total / BUFFER_SIZE;
-		maxrange = average * 1.05;
-		minrange = average * 0.95;
-
-		bool stable = true;
-	for(int i=0; i < BUFFER_SIZE; i++){
-		if ((list[i] > maxrange) || (list[i] < minrange)){
-		stable = false;
+		if (i < (BUFFER_SIZE / 2)){
+			firstHalfTotal = firstHalfTotal + list[i];
+		}
+		else{
+			secondHalfTotal = secondHalfTotal + list[i];
 		}
 	}
-	return stable;
+	average = total / BUFFER_SIZE;
+	firstHalfAve = (firstHalfTotal / (BUFFER_SIZE / 2));
+	secondHalfAve = (secondHalfTotal / (BUFFER_SIZE / 2));
+	maxrange = average * 1.04;
+	minrange = average * 0.96;
+
+	bool stable = true;
+	for(int i=0; i < BUFFER_SIZE; i++){
+		if ((list[i] > maxrange) || (list[i] < minrange)){
+			stable = false;
+		}
+	}
+	if (stable)
+		// Weighted average change forecast
+		// return the second half average with 1/2 the difference between first and second halfs
+		return secondHalfAve + ((secondHalfAve - firstHalfAve) / 2);
+	else
+		return 0;
 }
 
-bool isLeftStable (int currentSpeed){
+int isLeftStable (int currentSpeed){
 	// maintain left list
 	for(int i=(BUFFER_SIZE - 1); i > 0; --i){
 			leftStableList[i] = leftStableList[i-1];
@@ -47,7 +66,7 @@ bool isLeftStable (int currentSpeed){
 	//get total
 	return stableCheck(leftStableList);
 }
-bool isRightStable (int currentSpeed){
+int isRightStable (int currentSpeed){
 	// maintain list
 	for(int i = (BUFFER_SIZE - 1); i > 0; --i){
 			rightStableList[i] = rightStableList[i-1];

@@ -4,14 +4,18 @@
 #define NORMAL 3
 
 int ShooterMode = STOPPED;
+bool leftHitStable = false;
+bool rightHitStable = false;
 
 bool isShooterReady (int greencounts,int loopcounts){
-if (ShooterMode == READY_TO_SHOOT)
-	return true;
-else if ((greencounts >= (.75 * loopcounts)) && (loopcounts > 10))
-	return true;
-else
-	return false;
+	if (ShooterMode == READY_TO_SHOOT)
+		return true;
+  else if (leftHitStable && rightHitStable)
+  	return true;
+	else if ((greencounts >= (.80 * loopcounts)) && (loopcounts > 10))
+		return true;
+	else
+		return false;
 }
 
 void setIntakeSpeed(int speed){

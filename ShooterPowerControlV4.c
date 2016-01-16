@@ -3,7 +3,7 @@
 #include "StopLightControl.c"
 #include "StableCheck.c"
 
-#define ADJUST_LOCKOUT_CYCLES 40
+#define ADJUST_LOCKOUT_CYCLES 35
 
 int shooter_target_speed = 0;
 bool speedChange = false;
@@ -104,8 +104,8 @@ task shooter_power_control(){
 				// Right Side Speed Control
 				// Right Side is in recovery mode
 				if (recoveringRight){
-					// In recovery mode, we use max power until we reach 88% of target speed
-					if(current_right_speed > (shooter_target_speed * 0.88)){
+					// In recovery mode, we use max power until we reach 85% of target speed
+					if(current_right_speed > (shooter_target_speed * 0.85)){
 						recoveringRight = false;
 						right_adjust_lockout = ADJUST_LOCKOUT_CYCLES ;
 						right_color = YELLOW;
@@ -120,7 +120,7 @@ task shooter_power_control(){
 					// We're not at 95% yet, so keep recovering
 					else{
 						right_color = RED;
-						right_power = 127;
+						right_power = 80;
 					}
 				}
 				// Else in Normal mode
@@ -134,16 +134,20 @@ task shooter_power_control(){
 						writeDebugStreamLine("Right Side Now **** RECOVERY MODE ***");
 						recoveringRight = true;
 						right_color = RED;
-						right_power = 127;
+						right_power = 80;
+						rightHitStable = false;
 					}
 					// Otherwise use canned numbers with correcting offset
 					else {
 
 						// IF stable, we may adjust the offset
-						if (isRightStable(current_right_speed)){
+						int rightStableCheckResult = isRightStable(current_right_speed);
+						if (rightStableCheckResult > 0){
 							purgeRightValues();
 							// Print out "Right side stable @ what power, and what speed"
-							writeDebugStreamLine("Right side stable at %d speed", current_right_speed);
+							writeDebugStreamLine("Right side stable %d speed (REAL)", current_right_speed);
+							current_right_speed = rightStableCheckResult;
+							writeDebugStreamLine("Right side stable at %d speed (FORECAST)", current_right_speed);
 
 							// Speed is less than 90% target, add POWER!!!
 							if(current_right_speed < (shooter_target_speed * 0.9)){
@@ -155,7 +159,7 @@ task shooter_power_control(){
 									writeDebugStreamLine("Right Side Offset Adjust +3 - Adjusted Power: %d (%d Offset)", right_power, rightPowerOffset);
 								}
 							}
-							else if(current_right_speed < (shooter_target_speed - 40)){
+							else if(current_right_speed < (shooter_target_speed - 30)){
 								// PowerOffset should never go over 30...
 								// If so, something's wrong
 								if ((rightPowerOffset < 30) && (right_adjust_lockout == 0)){
@@ -164,7 +168,7 @@ task shooter_power_control(){
 									writeDebugStreamLine("Right Side Offset Adjust +2 - Adjusted Power: %d (%d Offset)", right_power, rightPowerOffset);
 								}
 							}
-							else if(current_right_speed < (shooter_target_speed - 20)){
+							else if(current_right_speed < (shooter_target_speed - 10)){
 								// PowerOffset should never go over 30...
 								// If so, something's wrong
 								if ((rightPowerOffset < 30) && (right_adjust_lockout == 0)){
@@ -187,7 +191,7 @@ task shooter_power_control(){
 									writeDebugStreamLine("Right Side Offset Adjust - 2 - Adjusted Power: %d (%d Offset)", right_power, rightPowerOffset);
 								}
 							}
-							else if(current_right_speed > (shooter_target_speed - 20)){
+							else if(current_right_speed > (shooter_target_speed + 20)){
 								if ((rightPowerOffset > -30) && (right_adjust_lockout == 0)){
 									rightPowerOffset = rightPowerOffset - 1;
 									right_adjust_lockout = ADJUST_LOCKOUT_CYCLES;
@@ -197,14 +201,15 @@ task shooter_power_control(){
 							// Speed is in the 4% sweet spot
 							else {
 								right_color = GREEN;
+								rightHitStable = true;
 							}
 						} // end is stable
 
 						// Now set the power level, and color
 						right_power = getRightShooterPower(shooter_target_speed) + rightPowerOffset;
 						right_color = YELLOW;
-						if ((current_right_speed > (shooter_target_speed - 50)) &&
-								(current_right_speed < (shooter_target_speed + 50))){
+						if (((current_right_speed > (shooter_target_speed - 30)) &&
+								(current_right_speed < (shooter_target_speed + 40))) || rightHitStable) {
 									right_color = GREEN;
 						}
 
@@ -215,8 +220,8 @@ task shooter_power_control(){
 			// Left Side Speed Control
 				// Left Side is in recovery mode
 				if (recoveringLeft){
-					// In recovery mode, we use max power until we reach 88% of target speed
-					if(current_left_speed > (shooter_target_speed * 0.88)){
+					// In recovery mode, we use max power until we reach 85% of target speed
+					if(current_left_speed > (shooter_target_speed * 0.85)){
 						recoveringLeft = false;
 						left_adjust_lockout = ADJUST_LOCKOUT_CYCLES ;
 						left_color = YELLOW;
@@ -231,7 +236,7 @@ task shooter_power_control(){
 					// We're not at 95% yet, so keep recovering
 					else{
 						left_color = RED;
-						left_power = 127;
+						left_power = 80;
 					}
 				}
 				// Else in Normal mode
@@ -245,17 +250,24 @@ task shooter_power_control(){
 						writeDebugStreamLine("Left Side Now *** RECOVERY MODE ****");
 						recoveringLeft = true;
 						left_color = RED;
-						left_power = 127;
+						left_power = 80;
+						leftHitStable = false;
 					}
 
 					// Otherwise use canned numbers and Offset
 					else {
 
-						if (isLeftStable(current_left_speed)){
+
+						// IF stable, we may adjust the offset
+						int leftStableCheckResult = isLeftStable(current_right_speed);
+						if (leftStableCheckResult > 0){
 							purgeLeftValues();
 							// Print out "Left side stable @ what power, and what speed"
-							writeDebugStreamLine("Left side stable at %d speed", current_left_speed);
-							// Now just set the colors
+							writeDebugStreamLine("Left side stable %d speed (REAL)", current_left_speed);
+							current_left_speed = leftStableCheckResult;
+							writeDebugStreamLine("Left side stable at %d speed (FORECAST)", current_left_speed);
+
+
 							// Speed is less than 90% of target, add POWER!!!
 							if(current_left_speed < (shooter_target_speed * 0.9)){
 								if((leftPowerOffset < 30) && (left_adjust_lockout == 0)){
@@ -264,14 +276,14 @@ task shooter_power_control(){
 									writeDebugStreamLine("Left Side Offset Adjust +3 - Adjusted Power: %d (%d Offset)", left_power, leftPowerOffset);
 								}
 							}
-							else if(current_left_speed < (shooter_target_speed - 40)){
+							else if(current_left_speed < (shooter_target_speed - 30)){
 								if((leftPowerOffset < 30) && (left_adjust_lockout == 0)){
 									leftPowerOffset = leftPowerOffset + 2;
 									left_adjust_lockout = ADJUST_LOCKOUT_CYCLES;
 									writeDebugStreamLine("Left Side Offset Adjust +2 - Adjusted Power: %d (%d Offset)", left_power, leftPowerOffset);
 								}
 							}
-							else if(current_left_speed < (shooter_target_speed - 20)){
+							else if(current_left_speed < (shooter_target_speed - 10)){
 								if((leftPowerOffset < 30) && (left_adjust_lockout == 0)){
 									leftPowerOffset = leftPowerOffset + 1;
 									left_adjust_lockout = ADJUST_LOCKOUT_CYCLES;
@@ -302,13 +314,14 @@ task shooter_power_control(){
 							// Speed is in the 4% sweet spot
 							else {
 								left_color = GREEN;
+								leftHitStable = true;
 							}
 						} // end is stable
 						// Now set the power level, and color
 						left_power = getLeftShooterPower(shooter_target_speed) + leftPowerOffset;
 						left_color = YELLOW;
-						if ((current_left_speed > (shooter_target_speed - 50)) &&
-								(current_left_speed < (shooter_target_speed + 50))){
+						if (((current_left_speed > (shooter_target_speed - 30)) &&
+								(current_left_speed < (shooter_target_speed + 40))) || leftHitStable){
 									left_color = GREEN;
 						}
 					} // end "else use canned numbers"
@@ -350,6 +363,8 @@ task shooter_power_control(){
 				speedChange = false;
 				writeDebugStreamLine("Left Side New - Adjusted Power: %d (%d Offset)", left_power, leftPowerOffset);
 				writeDebugStreamLine("Right Side New - Adjusted Power: %d (%d Offset)", right_power, rightPowerOffset);
+				leftHitStable = false;
+				rightHitStable = false;
 			}
 
 			// Control motor power
