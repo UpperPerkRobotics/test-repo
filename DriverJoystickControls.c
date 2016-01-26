@@ -8,7 +8,7 @@ task controllerPolling(){
 		// Check each button and do actions
 		if((vexRT[Btn8U] == 1) || (vexRT[Btn8UXmtr2] == 1)){
 			// Set motor target speed (Far), Channel 8, Button U
-			set_shooter_targets(910);
+			set_shooter_targets(890);
 			delay(500);
 		}
 		else if((vexRT[Btn8R] == 1) || (vexRT[Btn8RXmtr2] == 1)){
@@ -34,14 +34,14 @@ task controllerPolling(){
 		else if((vexRT[Btn8L] == 1) || (vexRT[Btn8LXmtr2] == 1)){
 			// Stop all motor speed (0), Channel 8, Button L
 			if (shooter_target_speed == 0){
-				delay(500)
+				if (backOut == false)
+					toggleShooterWheels = true;
 				backOut = true;
 			}
 			set_shooter_targets(0);
 			delay(500);
 		}
 		else if (backOut){
-			delay(1000);
 			toggleShooterWheels = true;
 			backOut = false;
 		}

@@ -3,11 +3,7 @@
 #pragma config(Sensor, dgtl3,  RedLight,       sensorLEDtoVCC)
 #pragma config(Sensor, dgtl4,  leftShooter,    sensorQuadEncoder)
 #pragma config(Sensor, dgtl6,  rightShooter,   sensorQuadEncoder)
-<<<<<<< HEAD
 #pragma config(Sensor, dgtl8,  drive,          sensorQuadEncoder)
-=======
-#pragma config(Sensor, dgtl9,  Jumper,         sensorTouch)
->>>>>>> 7c10f764a8ec8e26c3142ffe4917658692fe462f
 #pragma config(Sensor, dgtl11, FrontLED,       sensorLEDtoVCC)
 #pragma config(Sensor, dgtl12, BackLED,        sensorLEDtoVCC)
 #pragma config(Motor,  port2,           leftDrive,     tmotorVex393_MC29, openLoop)
@@ -29,8 +25,9 @@
 
 #include "HeadLightControl.c"
 #include "AutoShooting.c"
-#include "AutoShootingSimple.c"
-#include "ShooterPowerControlV5.c"
+//#include "AutoShootingSimple.c"
+#include "pidShooterControl.c"
+//#include "ShooterPowerControlV4.c"
 #include "DriverJoystickControls.c"
 #include "Vex_Competition_Includes.c"
 
@@ -41,16 +38,17 @@ void pre_auton()
 
 task autonomous()
 {
+	set_shooter_targets(890);
 	startTask(shooter_power_control);
-	set_shooter_targets(910);
-	simpleAutoIntake(5);
-	if(SensorValue[Jumper] == 1){
-		set_shooter_targets(0);
+	startTask(AutoIntake);
+	//simpleAutoIntake(5);
+	//if(SensorValue[Jumper] == 1){
+	//set_shooter_targets(0);
 		//spinLeft();
-	}
-	else {
-		simpleAutoIntake(5);
-	}
+	// 	}
+	//else {
+		//simpleAutoIntake(5);
+	// }
 }
 
 task usercontrol()
