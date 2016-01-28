@@ -14,7 +14,7 @@ bool isShooterReady (int greencounts,int loopcounts){
 		return true;
   else if (leftHitStable && rightHitStable)
   	return true;
-	else if ((greencounts >= (.80 * loopcounts)) && (loopcounts > 15))
+	else if ((greencounts >= (.70 * loopcounts)) && (loopcounts > 10))
 		return true;
 	else
 		return false;
