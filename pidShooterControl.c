@@ -16,9 +16,9 @@ bool firstRecoveryLoop = false;
 task shooter_power_control(){
 
 	// PID CONSTANTS
-	float pid_Kp = .05;
+	float pid_Kp = 0.2;
 	float pid_Ki = 0.012;
-	float pid_Kd = -0.05;
+	float pid_Kd = 0;
 
 	// create variables
 
@@ -108,8 +108,8 @@ task shooter_power_control(){
 				else{
 					// Set motors to 100 power until we're at 90% of target speed, on one of the flywheels
 					// at that point, we're in NORMAL MODE
-					if 	((current_left_speed > (shooter_target_speed * .95)) ||
-							 (current_right_speed > (shooter_target_speed * .95))){
+					if 	((current_left_speed > (shooter_target_speed * .90)) ||
+							 (current_right_speed > (shooter_target_speed * .90))){
 						ShooterMode = NORMAL;
 						writeDebugStreamLine("Exiting Recovery Mode - Reseting Integral - s.t.s = %d", shooter_target_speed);
 						writeDebugStreamLine("Left - current: %d", current_left_speed);
@@ -265,8 +265,8 @@ task shooter_power_control(){
 				// If we were ready to shoot, and the speed is way off ( <85% target speed on both sides
 				// Then we think we just fired a ball, this will reset the mode to "RECOVERY"
 				if ((ShooterMode == READY_TO_SHOOT)
-						&& (current_left_speed < (.88 * shooter_target_speed))
-						&& (current_right_speed < (.88 * shooter_target_speed))){
+						&& (current_left_speed < (.9 * shooter_target_speed))
+						&& (current_right_speed < (.9 * shooter_target_speed))){
 					ballFireDetected();
 					firstRecoveryLoop = true;
 					loop_counter = 0;
@@ -282,7 +282,7 @@ task shooter_power_control(){
 				else {
 					loop_counter = loop_counter + 1;
 					//Don't let the counts get too high!!!
-					if (loop_counter > 30){
+					if (loop_counter > 16){
 						green_counter = 0;
 						loop_counter = 0;
 					}

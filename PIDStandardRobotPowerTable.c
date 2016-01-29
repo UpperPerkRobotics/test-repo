@@ -157,8 +157,7 @@ int getRightShooterPower(int speed){
 		power = 20;
 	}
 	else if (speed > 500){
-	// Changed to 80 for this test;
-		power = 80;
+		power = 19;
 	}
 	else if (speed > 490){
 		power = 18;
@@ -343,8 +342,7 @@ int getLeftShooterPower(int speed){
 		power = 25;
 	}
 	else if (speed > 500){
-		// changed to 80 for this test
-		power = 80;
+		power = 24;
 	}
 	else if (speed > 490){
 		power = 23;
