@@ -6,6 +6,7 @@
 int ShooterMode = STOPPED;
 bool leftHitStable = false;
 bool rightHitStable = false;
+bool hipshot = false;
 int ballsFiredCount = 0;
 
 
@@ -34,7 +35,7 @@ void setIntakeSpeed(int speed){
 
 task AutoIntake(){
 	while (true){
-		if (ShooterMode == READY_TO_SHOOT){
+		if ((ShooterMode == READY_TO_SHOOT) || (hipshot == true)){
 				setIntakeSpeed(100);
 		}
 		else{
