@@ -41,6 +41,8 @@ task autonomous()
 	set_shooter_targets(910);
 	startTask(shooter_power_control);
 	startTask(AutoIntake);
+	delay(13000);
+	hipshot = true;
 	//simpleAutoIntake(5);
 	//if(SensorValue[Jumper] == 1){
 	//set_shooter_targets(0);
