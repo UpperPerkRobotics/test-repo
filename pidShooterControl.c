@@ -16,22 +16,20 @@ bool firstRecoveryLoop = false;
 task shooter_power_control(){
 
 	// PID CONSTANTS
-	float pid_Kp = 0.2;
-	float pid_Ki = 0.012;
+	float pid_Kp = 0.05;
+	float pid_Ki = 0.0115;
 	float pid_Kd = 0;
 
 	// create variables
 
 	// left variables
 	int last_left_clicks = 0;
-	float last_Error_left = 0;
-	float pid_Integral_left = 0;
+	float last_Error = 0;
+	float pid_Integral = 0;
 	SensorValue[leftShooter] = 0;
 
 	// right variables
 	int last_right_clicks = 0;
-	float last_Error_right = 0;
-	float pid_Integral_right = 0;
 	SensorValue[rightShooter] = 0;
 
 
@@ -66,32 +64,32 @@ task shooter_power_control(){
 		{
 			// If the speed was changed significantly, reset the Integral
 			if (speedChange){
-				pid_Integral_left = 0;
-				pid_Integral_right = 0;
+				pid_Integral = 0;
 				speedChange = false;
 			}
 
 			// get speed for both sides
 			// Variables for power control
-			int current_right_clicks = SensorValue[rightShooter];
+			// int current_right_clicks = SensorValue[rightShooter];
+			// Sensor's backwords
 			int current_left_clicks = SensorValue[leftShooter];
 
 			// current raw speed
-			int elapsed_right_clicks = current_right_clicks - last_right_clicks;
+			// int elapsed_right_clicks = current_right_clicks - last_right_clicks;
 			int elapsed_left_clicks = current_left_clicks - last_left_clicks;
 			// int elapsed_time = current_read_time - last_read_time;
 
+			int elapsed_clicks = elapsed_left_clicks * 1;
+
 			// filtered speed
-			int current_right_speed = elapsed_right_clicks * 5;
-			int current_left_speed = elapsed_left_clicks * 5;
+			int current_speed = elapsed_clicks * 5;
 
 			// Stoplight color controls
-			int left_color = NONE;
+			int color = NONE;
 			int right_color = NONE;
 
 			// Save Last Numbers for next loop
 			last_left_clicks = current_left_clicks;
-			last_right_clicks = current_right_clicks;
 
 			// We may be in RECOVERY MODE
 			if (ShooterMode == RECOVERY){
@@ -100,35 +98,43 @@ task shooter_power_control(){
 				// reduce the overshoot error on the integral, and get to the target speed quicker
 
 				// Set motors to 100 power until we're at 90% of target speed, on one of the flywheels
-				motor[leftTopShooter] = 100;
-				motor[rightTopShooter] = 100;
+				motor[leftTopShooter] = 127;
+			  motor[rightTopShooter] = 127;
 
 				if(firstRecoveryLoop)
 					firstRecoveryLoop = false;
 				else{
 					// Set motors to 100 power until we're at 90% of target speed, on one of the flywheels
 					// at that point, we're in NORMAL MODE
-					if 	((current_left_speed > (shooter_target_speed * .90)) ||
-							 (current_right_speed > (shooter_target_speed * .90))){
+					if 	(current_speed > (shooter_target_speed - 45)){
 						ShooterMode = NORMAL;
 						writeDebugStreamLine("Exiting Recovery Mode - Reseting Integral - s.t.s = %d", shooter_target_speed);
-						writeDebugStreamLine("Left - current: %d", current_left_speed);
-						writeDebugStreamLine("Left - current: %d", current_right_speed);
-						//pid_Integral_left = 0;
-						//pid_Integral_right = 0;
+						writeDebugStreamLine("Left - current: %d", current_speed);
+						writeDebugStreamLine("Right - current: %d", current_speed);
+						pid_Integral = 0;
 					}
+				}
+
+				//////////////////////////////////////////////////////////////
+				// Debug info
+				/////////////////////////////////////////////////////////////
+
+				print_counter = print_counter + 1;
+				if (print_counter == 10){
+					writeDebugStreamLine("Recovery Mode Speed: %d", current_speed);
+					print_counter = 0;
 				}
 			}
 			// If we are not in RECOVERY MODE, then use PID
 			else {
 				/////////////////////////////////////////////////////////////////
-				// DO Left Side PID
+				// DO PID
 				/////////////////////////////////////////////////////////////////
 
 				// We have the actual speed, and the current speed.
 
 				// Calculate ERROR = Current_Speed = Actual;
-				float pid_error_left = shooter_target_speed - current_left_speed;
+				float pid_error = shooter_target_speed - current_speed;
 
 	      // CALCULATE INTEGRAL - if Ki is not 0
 	      if( pid_Ki != 0 )
@@ -138,109 +144,60 @@ task shooter_power_control(){
 	      	//	pid_Integral_left = pid_error_left;
 	      	// If we are inside controlable window then integrate the error
 	        //else
-	      	if( abs(pid_error_left) < PID_INTEGRAL_LIMIT )
-	        	pid_Integral_left = pid_Integral_left + pid_error_left;
+	      	if( abs(pid_error) < PID_INTEGRAL_LIMIT )
+	        	pid_Integral = pid_Integral + pid_error;
 	        else
-	          pid_Integral_left = 0;
+	          pid_Integral = 0;
 	        }
 	      else
-	        pid_Integral_left = 0;
+	        pid_Integral = 0;
 
 	      // CALCULATE DERIVATIVE
-	      float pid_Derivative_left = pid_error_left - last_Error_left;
+	      float pid_Derivative = pid_error - last_Error;
 
-				float pid_correction_left =
-					(pid_error_left * pid_Kp) +
-					(pid_Integral_left * pid_Ki) +
-					(pid_Derivative_left * pid_Kd);
+				float pid_correction =
+					(pid_error * pid_Kp) +
+					(pid_Integral * pid_Ki) +
+					(pid_Derivative * pid_Kd);
 
-				// SET SPEED FOR Left Flywheel
-				int motor_power_left = getLeftShooterPower(shooter_target_speed) + pid_correction_left;
-				if (motor_power_left > 127)
-					motor_power_left = 127;
-				if (motor_power_left < 0)
-					motor_power_left = 0;
+				// SET SPEED FOR Flywheel
+				int motor_power = getLeftShooterPower(shooter_target_speed) + pid_correction;
+				if (motor_power > 127)
+					motor_power = 127;
+				if (motor_power < 0)
+					motor_power = 0;
 
-				motor[leftTopShooter] = motor_power_left;
+				motor[leftTopShooter] = motor_power;
+				motor[rightTopShooter] = motor_power;
 
 				// SAVE Left Variables
-				last_Error_left = pid_error_left;
-
-
-				/////////////////////////////////////////////////////////////////
-				// DO RIGHT SIDE PID
-				/////////////////////////////////////////////////////////////////
-
-				// We have the actual speed, and the current speed.
-
-				// Calculate ERROR = Current_Speed = Actual;
-				float pid_error_right = shooter_target_speed - current_right_speed;
-
-	      // CALCULATE INTEGRAL - if Ki is not 0
-	      if( pid_Ki != 0 )
-	      	{
-	      	// If the sign of the error changes, then reset the integral
-	      	//if (sgn(pid_error_right) != (sgn(pid_Integral_right)
-	      	//	pid_Integral_right = pid_error_right;
-	      	// If we are inside controlable window then integrate the error
-	        //else
-	      	if( abs(pid_error_right) < PID_INTEGRAL_LIMIT )
-	        	pid_Integral_right = pid_Integral_right + pid_error_right;
-	        else
-	          pid_Integral_right = 0;
-	        }
-	      else
-	        pid_Integral_right = 0;
-
-	      // CALCULATE DERIVATIVE
-	      float pid_Derivative_right = pid_error_right - last_Error_right;
-
-				float pid_correction_right =
-					(pid_error_right * pid_Kp) +
-					(pid_Integral_right * pid_Ki) +
-					(pid_Derivative_right * pid_Kd);
-
-				// SET SPEED FOR RIGHT Flywheel
-				int motor_power_right = getRightShooterPower(shooter_target_speed)+ pid_correction_right;
-				if (motor_power_right > 127)
-					motor_power_right = 127;
-				if (motor_power_right < 0)
-					motor_power_right = 0;
-
-				motor[rightTopShooter] = motor_power_right;
-				// SAVE Right Variables
-				last_Error_right = pid_error_right;
+				last_Error = pid_error;
 
 
 				///////////////////////////////////////////
 				// DO Lights
 				///////////////////////////////////////////
 
-				left_color = RED;
+				color = RED;
 
-				if (abs(pid_error_left) < (shooter_target_speed * .1))
-					left_color = YELLOW;
-				if (abs(pid_error_left) < (shooter_target_speed * .03))
-					left_color = GREEN;
-
-				right_color = RED;
-
-				if (abs(pid_error_right) < (shooter_target_speed * .1))
-					right_color = YELLOW;
-				if (abs(pid_error_right) < (shooter_target_speed * .03))
-					right_color = GREEN;
-
+				if (abs(pid_error) < (shooter_target_speed * .1))
+					color = YELLOW;
+				if (abs(pid_error) < (shooter_target_speed * .03))
+					color = GREEN;
 
 
 				// Set Stoplight
-				if((right_color == NONE) && (left_color == NONE)){
+				if(ShooterMode == READY_TO_SHOOT){
+					setStopLight(GREEN);
+				}
+				else if(color == NONE){
 					setStopLight(NONE);
 				}
-				else if((right_color == GREEN) && (left_color == GREEN)){
+				else if(color == GREEN){
 					setStopLight(GREEN);
 					green_counter = green_counter + 1;
 				}
-				else if((right_color == RED) || (left_color == RED)){
+				else if(color == RED){
 					setStopLight(RED);
 				}
 				else {
@@ -252,8 +209,7 @@ task shooter_power_control(){
 
 				print_counter = print_counter + 1;
 				if (print_counter == 10){
-					writeDebugStreamLine("Left Speed: %d, Offset Power: %d", current_left_speed, pid_correction_left);
-					writeDebugStreamLine("Right Speed: %d, Offset Power: %d", current_right_speed, pid_correction_right);
+					writeDebugStreamLine("Speed: %d, Offset Power: %d", current_speed, pid_correction);
 					print_counter = 0;
 				}
 
@@ -265,16 +221,14 @@ task shooter_power_control(){
 				// If we were ready to shoot, and the speed is way off ( <85% target speed on both sides
 				// Then we think we just fired a ball, this will reset the mode to "RECOVERY"
 				if ((ShooterMode == READY_TO_SHOOT)
-						&& (current_left_speed < (.9 * shooter_target_speed))
-						&& (current_right_speed < (.9 * shooter_target_speed))){
+						&& (current_speed < (.9 * shooter_target_speed))){
 					ballFireDetected();
 					firstRecoveryLoop = true;
 					loop_counter = 0;
 					green_counter = 0;
 
 					// reset integrals after firing:
-					pid_Integral_left = 0;
-					pid_Integral_right = 0;
+					pid_Integral = 0;
 				}
 				// Else we are not ready to shoot.  Increment to loop counters, and green counts appropriately
 				// If there's enough Greens out of the last X times through the loop; then set the ShooterMode

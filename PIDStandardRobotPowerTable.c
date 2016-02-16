@@ -1,73 +1,73 @@
 int getRightShooterPower(int speed){
 	int power = 0;
 	if (speed > 940){
-		power = 90;
+		power = 74;
 	}
 	else if (speed > 935){
-		power = 70;
+		power = 72;
 	}
 	else if (speed > 925){
-		power = 69;
+		power = 71;
 	}
 	else if (speed > 915){
-		power = 68;
+		power = 70;
 	}
 	else if (speed > 905){
-		power = 67;
+		power = 69;
 	}
 	else if (speed > 895){
-		power = 66;
+		power = 68;
 	}
 	else if (speed > 885){
-		power = 65;
+		power = 67;
 	}
 	else if (speed > 880){
-		power = 64;
+		power = 66;
 	}
 	else if (speed > 870){
-		power = 63;
+		power = 65;
 	}
 	else if (speed > 865){
-		power = 62;
+		power = 64;
 	}
 	else if (speed > 860){
-		power = 61;
+		power = 63;
 	}
 	else if (speed > 855){
-		power = 60;
+		power = 62;
 	}
 	else if (speed > 850){
-		power = 59;
+		power = 61;
 	}
 	else if (speed > 848){
-		power = 58;
+		power = 60;
 	}
 	else if (speed > 846){
-		power = 57;
+		power = 59;
 	}
 	else if (speed > 844){
-		power = 56;
+		power = 58;
 	}
 	else if (speed > 842){
-		power = 55;
+		power = 57;
 	}
 	else if (speed > 840){
-		power = 54;
+		power = 56;
 	}
 	else if (speed > 835){
-		power = 53;
+		power = 55;
 	}
 	else if (speed > 830){
-		power = 52;
+		power = 54;
 	}
 	else if (speed > 820){
-		power = 51;
+		power = 53;
 	}
 	else if (speed > 810){
-		power = 50;
+		power = 52;
 	}
 	else if (speed > 805){
-		power = 49;
+		power = 50;
 	}
 	else if (speed > 800){
 		power = 48;

@@ -38,7 +38,7 @@ void pre_auton()
 
 task autonomous()
 {
-	set_shooter_targets(840);
+	set_shooter_targets(850);
 	startTask(shooter_power_control);
 	startTask(AutoIntake);
 	delay(13000);
