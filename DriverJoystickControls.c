@@ -8,27 +8,27 @@ task controllerPolling(){
 		// Check each button and do actions
 		if((vexRT[Btn8U] == 1) || (vexRT[Btn8UXmtr2] == 1)){
 			// Set motor target speed (Far), Channel 8, Button U
-			set_shooter_targets(850);
+			set_shooter_targets(56);
 			delay(500);
 		}
 		else if((vexRT[Btn8R] == 1) || (vexRT[Btn8RXmtr2] == 1)){
 			// Set motor target speed (Medium), Channel 8, Button R
-			set_shooter_targets(700);
+			set_shooter_targets(46);
 			delay(500);
 		}
 		else if((vexRT[Btn8D] == 1) || (vexRT[Btn8DXmtr2] == 1)){
 			// Set motor target speed (Short), Channel 8, Button D
-			set_shooter_targets(590);
+			set_shooter_targets(36);
 			delay(500);
 		}
 		else if((vexRT[Btn6U] == 1) || (vexRT[Btn6UXmtr2] == 1)){
 			// Adjust motor target speed (5 up), Channel 6, Button U
-			adjust_shooter_targets(10);
+			adjust_shooter_targets(1);
 			delay(250);
 		}
 		else if((vexRT[Btn6D] == 1) || (vexRT[Btn6DXmtr2] == 1)){
 			// Adjust motor target speed (5 down), Channel 6, Button D
-			adjust_shooter_targets(-10);
+			adjust_shooter_targets(-1);
 			delay(500);
 		}
 		else if((vexRT[Btn8L] == 1) || (vexRT[Btn8LXmtr2] == 1)){

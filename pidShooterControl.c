@@ -1,4 +1,4 @@
-#include "PIDStandardRobotPowerTable.c"
+#include "EvenMoreRealShooterPowerTable.c"
 #include "StopLightControl.c"
 #include "StableCheck.c"
 
@@ -17,7 +17,7 @@ task shooter_power_control(){
 
 	// PID CONSTANTS
 	float pid_Kp = 0.05;
-	float pid_Ki = 0.0115;
+	float pid_Ki = 0.007;
 	float pid_Kd = 0;
 
 	// create variables
@@ -72,7 +72,7 @@ task shooter_power_control(){
 			// Variables for power control
 			// int current_right_clicks = SensorValue[rightShooter];
 			// Sensor's backwords
-			int current_left_clicks = SensorValue[leftShooter];
+			int current_left_clicks = SensorValue[rightShooter]/3;
 
 			// current raw speed
 			// int elapsed_right_clicks = current_right_clicks - last_right_clicks;
@@ -82,7 +82,7 @@ task shooter_power_control(){
 			int elapsed_clicks = elapsed_left_clicks * 1;
 
 			// filtered speed
-			int current_speed = elapsed_clicks * 5;
+			int current_speed = elapsed_clicks;
 
 			// Stoplight color controls
 			int color = NONE;
@@ -161,7 +161,7 @@ task shooter_power_control(){
 					(pid_Derivative * pid_Kd);
 
 				// SET SPEED FOR Flywheel
-				int motor_power = getLeftShooterPower(shooter_target_speed) + pid_correction;
+				int motor_power = getShooterPower(shooter_target_speed) + pid_correction;
 				if (motor_power > 127)
 					motor_power = 127;
 				if (motor_power < 0)
