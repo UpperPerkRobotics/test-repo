@@ -18,7 +18,7 @@ task controllerPolling(){
 		}
 		else if((vexRT[Btn8D] == 1) || (vexRT[Btn8DXmtr2] == 1)){
 			// Set motor target speed (Short), Channel 8, Button D
-			set_shooter_targets(36);
+			set_shooter_targets(38);
 			delay(500);
 		}
 		else if((vexRT[Btn6U] == 1) || (vexRT[Btn6UXmtr2] == 1)){
@@ -137,19 +137,28 @@ task driving(){
 			}
 		}
 
+		//Strafe
+		if((vexRT[Ch4Xmtr2] > 20) || (vexRT[Ch4Xmtr2] < -20))
+		{
+			motor[strafe] = vexRT[Ch4Xmtr2] / 2;
+		}
+		else {
+				motor[strafe] = 0;
+		}
+
+
+
+
 		// Lifter controls
 
 		if((vexRT[Btn5U] == 1) || (vexRT[Btn5UXmtr2] == 1)){
 			motor[rightLifter] = 80;
-			motor[leftLifter] = 80;
 		}
 		else if((vexRT[Btn5D] == 1) || (vexRT[Btn5UXmtr2] == 1)){
 			motor[rightLifter] = -80;
-			motor[leftLifter] = -80;
 		}
 		else {
 			motor[rightLifter] = 0;
-			motor[leftLifter] = 0;
 		}
 		delay(50);
 	}

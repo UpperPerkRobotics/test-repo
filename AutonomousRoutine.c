@@ -10,7 +10,7 @@
 #pragma config(Motor,  port3,           rightDrive,    tmotorVex393_MC29, openLoop, reversed)
 #pragma config(Motor,  port4,           leftIntake,    tmotorVex393_MC29, openLoop, reversed)
 #pragma config(Motor,  port5,           rightIntake,   tmotorVex393_MC29, openLoop)
-#pragma config(Motor,  port6,           leftLifter,    tmotorVex393_MC29, openLoop)
+#pragma config(Motor,  port6,           strafe,    tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port7,           rightLifter,   tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port8,           leftTopShooter, tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port9,           rightTopShooter, tmotorVex393_MC29, openLoop, reversed)
@@ -38,7 +38,7 @@ void pre_auton()
 
 task autonomous()
 {
-	set_shooter_targets(850);
+	set_shooter_targets(57);
 	startTask(shooter_power_control);
 	startTask(AutoIntake);
 	delay(13000);

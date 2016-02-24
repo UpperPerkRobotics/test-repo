@@ -16,8 +16,8 @@ bool firstRecoveryLoop = false;
 task shooter_power_control(){
 
 	// PID CONSTANTS
-	float pid_Kp = 0.05;
-	float pid_Ki = 0.007;
+	float pid_Kp = 0.045;
+	float pid_Ki = 0.006;
 	float pid_Kd = 0;
 
 	// create variables
@@ -106,12 +106,12 @@ task shooter_power_control(){
 				else{
 					// Set motors to 100 power until we're at 90% of target speed, on one of the flywheels
 					// at that point, we're in NORMAL MODE
-					if 	(current_speed > (shooter_target_speed - 45)){
+					if 	(current_speed > (shooter_target_speed - 4)){
 						ShooterMode = NORMAL;
 						writeDebugStreamLine("Exiting Recovery Mode - Reseting Integral - s.t.s = %d", shooter_target_speed);
 						writeDebugStreamLine("Left - current: %d", current_speed);
 						writeDebugStreamLine("Right - current: %d", current_speed);
-						pid_Integral = 0;
+						//pid_Integral = 0;
 					}
 				}
 
@@ -228,7 +228,7 @@ task shooter_power_control(){
 					green_counter = 0;
 
 					// reset integrals after firing:
-					pid_Integral = 0;
+					//pid_Integral = 0;
 				}
 				// Else we are not ready to shoot.  Increment to loop counters, and green counts appropriately
 				// If there's enough Greens out of the last X times through the loop; then set the ShooterMode
