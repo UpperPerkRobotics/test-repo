@@ -5,6 +5,14 @@ bool manualIntake = false;
 
 task controllerPolling(){
 	while(true){
+
+		// Puncher Held down
+		if (vexRT[Btn5DXmtr2] == 1)
+			motor[Puncher] = 127;
+		else
+			motor[Puncher] = 0;
+
+
 		// Check each button and do actions
 		if((vexRT[Btn8U] == 1) || (vexRT[Btn8UXmtr2] == 1)){
 			// Set motor target speed (Far), Channel 8, Button U
@@ -127,13 +135,11 @@ task driving(){
 		{
 			//writeDebugStreamLine("***** Right Side Go ******");
 			manualIntake = true;
-			motor[rightIntake] = vexRT[Ch2Xmtr2];
-			motor[leftIntake] = vexRT[Ch2Xmtr2];
+			motor[Intake] = vexRT[Ch2Xmtr2];
 		}
 		else {
 			if(manualIntake){
-				motor[rightIntake] = 0;
-				motor[leftIntake] = 0;
+				motor[Intake] = 0;
 			}
 		}
 
@@ -151,10 +157,10 @@ task driving(){
 
 		// Lifter controls
 
-		if((vexRT[Btn5U] == 1) || (vexRT[Btn5UXmtr2] == 1)){
+		if((vexRT[Btn5U] == 1)){
 			motor[rightLifter] = 80;
 		}
-		else if((vexRT[Btn5D] == 1) || (vexRT[Btn5UXmtr2] == 1)){
+		else if((vexRT[Btn5D] == 1)){
 			motor[rightLifter] = -80;
 		}
 		else {

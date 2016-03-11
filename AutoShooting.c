@@ -29,8 +29,7 @@ void ballFireDetected(){
 
 
 void setIntakeSpeed(int speed){
-	motor[leftIntake] = speed;
-	motor[rightIntake] = speed;
+	motor[Intake] = speed;
 }
 
 task AutoIntake(){

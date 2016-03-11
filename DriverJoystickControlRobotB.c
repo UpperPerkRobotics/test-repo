@@ -26,34 +26,27 @@ task controllerPolling(){
 			delay(500);
 		}
 		else if((vexRT[Btn6U] == 1) || (vexRT[Btn6UXmtr2] == 1)){
-			// Adjust motor target speed (5 up), Channel 6, Button U
-		//	adjust_shooter_targets(10);
-			delay(250);
+			// Intake Forward only, apply breaking power to expeller
+			motor[intake] = 127;
 		}
 		else if((vexRT[Btn6D] == 1) || (vexRT[Btn6DXmtr2] == 1)){
-			// Adjust motor target speed (5 down), Channel 6, Button D
-			//adjust_shooter_targets(-10);
-			delay(500);
+			// Intake Reverse
+			motor[intake] = -100;
 		}
 		else if((vexRT[Btn8L] == 1) || (vexRT[Btn8LXmtr2] == 1)){
 			// Stop all motor speed (0), Channel 8, Button L
 
 		}
-
-
 		else if((vexRT[Btn7U] == 1) || (vexRT[Btn7UXmtr2] == 1)){
 			// Forward Intake, Channel 7, Button U
-			motor[intake] = 100;
 			delay(250);
 		}
 		else if((vexRT[Btn7D] == 1) || (vexRT[Btn7DXmtr2] == 1)){
 			// Backward Intake, Channel 7, Button D
-			motor[intake] = -100;
 			delay(250);
 		}
 		else if((vexRT[Btn7L] == 1) || (vexRT[Btn7LXmtr2] == 1)){
 			// Stop Intake, Channel 7, Button L
-			motor[intake] = 0;
 			delay(250);
 		}
 		else if(vexRT[Btn5U] == 1){
@@ -62,8 +55,11 @@ task controllerPolling(){
 			if(strafeMode){
 				SensorValue[in1] = 0;
 			}
-
 			delay(250);
+		}
+		else{
+			motor[intake] = 0;
+			motor[expeller] = 0;
 		}
 		delay(10);
 	}
@@ -86,7 +82,7 @@ task driving(){
 			}
 			else {
 				if (turnBreaking){
-					motor[rightDrive] = -1 * (SensorValue[in1] / 2);
+					motor[rightDrive] = -1 * sgn(SensorValue[in1]) * 15;
 				}
 				else{
 					motor[rightDrive] = 0;
@@ -101,28 +97,28 @@ task driving(){
 				motor[leftDrive] = vexRT[Ch3];
 			}
 			else {
-				if (turning){
-					motor[leftDrive] = 0;
+				if (turnBreaking){
+					motor[leftDrive] = sgn(SensorValue[in1]) * 15;
 				}
 				else{
-					motor[leftDrive] = (SensorValue[in1] / 2);
+					motor[leftDrive] = 0;
 				}
 			}
 
 			// Should be stopped
 			if(((vexRT[Ch3] < 20) && (vexRT[Ch3] > - 20)) &&
 				((vexRT[Ch2] < 20) && (vexRT[Ch2] > - 20))){
+					if (turnBreaking){
+						if (abs(SensorValue[in1]) > (abs(lastTurnError) + 3)) // errors getting worse (surpress noise with 3)
+							lastTurnError = SensorValue[in1];
+						else
+							turnBreaking = false;
+					}
 					if(turning){
 						turning = false;
 						lastTurnError = 0;
 						SensorValue[in1] = 0;
 						turnBreaking = true;
-					}
-					if (turnBreaking){
-						if (abs(SensorValue[in1]) >= abs(lastTurnError)) // errors getting worse
-							lastTurnError = SensorValue[in1];
-						else
-							turnBreaking = false;
 					}
 				}
 		}
@@ -130,14 +126,16 @@ task driving(){
 		else {
 			//writeDebugStreamLine("***** Drive Loop ******");
 			if ((vexRT[Ch3] > 20) || (vexRT[Ch3] < -20) ||
-				  (vexRT[Ch4] > 20) || (vexRT[Ch4] < -20))
+				  (vexRT[Ch1] > 20) || (vexRT[Ch1] < -20))
 			{
-				motor[rightDrive] 	= vexRT[Ch3] - (SensorValue[in1] / 10);
-				motor[leftDrive] 		= vexRT[Ch3] + (SensorValue[in1] / 10);
-				motor[strafeDrive] 	= (vexRT[Ch4] );
+				motor[rightDrive] 	= vexRT[Ch3] - (SensorValue[in1] / 4);
+				motor[leftDrive] 		= vexRT[Ch3] + (SensorValue[in1] / 4);
+				motor[strafeDrive] 	= vexRT[Ch1];
+				motor[strafeFront]  = vexRT[Ch1];
 			}
 			else {
 				motor[strafeDrive] = 0;
+				motor[strafeFront] = 0;
 				motor[rightDrive] = 0;
 				motor[leftDrive] = 0;
 			}
@@ -151,7 +149,7 @@ task driving(){
 
 		// Shooter controls
 
-		if((vexRT[Btn5U] == 1) || (vexRT[Btn5UXmtr2] == 1)){
+		if((vexRT[Btn5D] == 1) || (vexRT[Btn5DXmtr2] == 1)){
 			motor[shooterLeft] = 127;
 			motor[shooterRight] = -127;
 		}
@@ -159,7 +157,7 @@ task driving(){
 			motor[shooterLeft] = 0;
 			motor[shooterRight] = 0;
 		}
-		delay(50);
+		delay(5);
 	}
 }
 // End Driver joystick Controls
